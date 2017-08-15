@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('fynd_movies.api.urls', namespace='api')),
+    url(r'^', include('movies.urls')),
 ]
