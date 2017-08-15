@@ -1,1 +1,1 @@
-web: gunicorn fynd_movies.movies.wsgi
+web: gunicorn fynd_movies.wsgi
