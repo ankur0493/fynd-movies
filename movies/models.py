@@ -1,11 +1,21 @@
 from __future__ import unicode_literals
 
+import uuid
+
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class Director(models.Model):
+class BaseModel(models.Model):
+    uuid = models.UUIDField( _("UUID"), default=uuid.uuid4, editable=False,
+                             db_index=True )
+
+    class Meta:
+        abstract = True
+
+
+class Director(BaseModel):
     """
     This holds information about a director
     """
@@ -19,7 +29,7 @@ class Director(models.Model):
         verbose_name_plural = _("Directors")
 
 
-class Genre(models.Model):
+class Genre(BaseModel):
     """
     This holds all the available genres
     """
@@ -33,7 +43,7 @@ class Genre(models.Model):
         verbose_name_plural = _("Genres")
 
 
-class Movie(models.Model):
+class Movie(BaseModel):
     """
     This model holds all information about the movies
     """
@@ -62,7 +72,7 @@ class Movie(models.Model):
         verbose_name_plural = _("Movies")
 
 
-class Rating(models.Model):
+class Rating(BaseModel):
     """
     Contains all the ratings for movies. The way this works is that users give
     ratings for individual movies. We store all the votes for a movie. These
