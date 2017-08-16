@@ -8,6 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class BaseModel(models.Model):
+    '''
+    We use UUID for all models instead of an 'id'
+    '''
     uuid = models.UUIDField( _("UUID"), default=uuid.uuid4, editable=False,
                              db_index=True )
 
