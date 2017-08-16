@@ -58,11 +58,16 @@ class Movie(BaseModel):
 
     @property
     def rating(self):
-        return self.ratings.aggregate(rating=models.Avg('rating'))['rating']
+        rating = self.ratings.aggregate(rating=models.Avg('rating'))['rating']
+        return rating if rating else 0
+
+    @property
+    def number_ratings(self):
+        return self.ratings.count()
 
     @property
     def duration_string(self):
-        return "{}h {}min".format(duration/60, duration%60)
+        return "{}h {}min".format(self.duration/60, self.duration%60)
 
     def __unicode__(self):
         return self.name
