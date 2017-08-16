@@ -112,9 +112,9 @@ class MovieUpdateDestroySerializer(BaseMovieSerializer):
             instance.save()
 
             return instance
-        except Director.DoesNotExist, e:
+        except Director.DoesNotExist:
             serializers.ValidationError( { 'director': _("Cannot retreive Director with given UUID") } )
-        except Genre.DoesNotExist, e:
+        except Genre.DoesNotExist:
             serializers.ValidationError( { 'genres': _("Cannot retreive Genre with given UUID") } )
 
     class Meta(BaseMovieSerializer.Meta):
