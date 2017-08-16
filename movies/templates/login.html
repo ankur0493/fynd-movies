@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block customcss %}
+<style>
+    #login-form {
+        width: 400px;
+    }
+</style>
+{% endblock %}
+
+{% block bodycontent %}
+    <div class="row justify-content-center">
+        <form id="login-form">
+            <div class="modal-body">
+                <div id="div-login-msg">
+                    <div id="icon-login-msg" class="fa fa-chevron-right"></div>
+                    <span id="text-login-msg">Type your username and password.</span>
+                </div>
+                <input id="login_username" class="form-control" type="text" placeholder="Username" required>
+                <input id="login_password" class="form-control" type="password" placeholder="Password" required>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    $(document).ready(function(){
+        $( "#login-form" ).submit(function( event ) {
+          var login_url = "/api-auth/login/";
+          var csrftoken = getCookie('csrftoken');
+          $.ajax({
+            type: "POST",
+            url: login_url,
+            beforeSend: function(request) {
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            data: $("#login-form").serialize(),
+            success: function(data) {
+                //$.cookie("logged-in-user", true);
+                alert("Logged In");
+                window.open("/");
+            }
+          })
+
+          event.preventDefault();
+        });
+    });
+</script>
+{% endblock %}

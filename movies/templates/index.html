@@ -1,18 +1,53 @@
-<html>
-  <head>
-    <title>Fynd Movie Database: The Ultimate Movie Database</title>
-  </head>
-  <body>
-    <div style="text-align:center">
-      Welcome to the Fynd Movie Database. We are still under development, but you can access our APIs at the following URLs:<br /><br />
-          <strong>Movies List, Create:</strong> /api/v1/movies/<br />
-          <strong>Movie Retrieve, Edit, Delete:</strong> /api/v1/movies/:uuid/<br /><br />
+{% extends "base.html" %}
 
-          <strong>Directors List, Create:</strong> /api/v1/directors/<br />
-          <strong>Directors Retrieve, Edit, Delete:</strong> /api/v1/directors/:uuid/<br /><br />
+{% block customcss %}
+    <style>
+        .movie {
+            background-color: rgb(246, 246, 245);
+            margin: 5px 0 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
 
-          <strong>Genre List, Create:</strong> /api/v1/genres/<br />
-          <strong>Genre Retrieve, Edit, Delete:</strong> /api/v1/genres/:uuid/<br /><br />
-    </div>
-  </body>
-</html>
+{% block bodycontent %}
+    <div id="movies-list"></div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+
+    function getGenresStr(genreList) {
+        html_str = ""
+        $.each(genreList, function(i, genreData) {
+            if (i > 0) {
+                html_str += " | "
+            }
+            html_str += "<a href='"+genreData.url+"'>"+genreData.genre+"</a>"
+        });
+        return html_str
+    }
+
+    function getDirectorStr(directorData) {
+        return "<a href='"+directorData.url+"'>"+directorData.name+"</a>"
+    }
+
+    $(document).ready(function(){
+        var urls = {
+               'root': '/api/v1',
+               'movies': {
+                     'root': '/movies',
+                         },
+                   }
+        $.getJSON(urls.root + urls.movies.root, function(data) {
+            var results = data.results;
+            $.each(results, function(i, movieData) {
+                $("#movies-list").append("<div class='row justify-content-center movie'><div class='col-8'><a href='"+movieData.url+"' target='_blank'>"+movieData.name+"</a><br />"+movieData.duration+" - <span class='genre-list'></span>"+ getGenresStr(movieData.genres)+"<br /><strong>Director: </strong>"+getDirectorStr(movieData.director)+"<br /><strong>Fynd Score: </strong>"+movieData.rating+"</div></div>")
+            });
+        });
+        //var xhr = new XMLHttpRequest();
+        //xhr.open("GET", urls.root + urls.movies.root, false);
+        //xhr.send();
+    });
+</script>
+{% endblock %}
