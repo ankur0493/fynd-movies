@@ -73,9 +73,9 @@ class MovieCreateSerializer(BaseMovieSerializer):
             for genre in genres:
                 movie.genres.add()
             return movie
-        except Director.DoesNotExist, e:
+        except Director.DoesNotExist:
             serializers.ValidationError( { 'director': _("Cannot retreive Director with given UUID") } )
-        except Genre.DoesNotExist, e:
+        except Genre.DoesNotExist:
             serializers.ValidationError( { 'genres': _("Cannot retreive Genre with given UUID") } )
 
     class Meta(BaseMovieSerializer.Meta):
